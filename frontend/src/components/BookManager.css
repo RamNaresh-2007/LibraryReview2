@@ -1,0 +1,200 @@
+.book-manager {
+    max-width: 1200px;
+}
+
+.bm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.bm-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.bm-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.bm-meta b {
+    color: #111827;
+}
+
+.btn-add-book {
+    background: #1a56db;
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
+.btn-add-book:hover {
+    background: #1e429f;
+}
+
+/* ── Toolbar ── */
+.bm-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 16px;
+}
+
+.bm-search {
+    flex: 1;
+    max-width: 320px;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: var(--radius-sm);
+}
+
+.cat-pills {
+    display: flex;
+    gap: 8px;
+}
+
+.cat-pill {
+    background: #f3f4f6;
+    color: #4b5563;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.cat-pill.active {
+    background: #1a56db;
+    color: white;
+}
+
+/* ── Table ── */
+.bm-table-wrap {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.bm-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bm-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f9fafb;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.bm-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.9rem;
+}
+
+.b-title {
+    font-weight: 600;
+    color: #111827;
+}
+
+.b-author {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.cat-badge {
+    background: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: #4b5563;
+}
+
+.avail-toggle {
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.avail-toggle.avail {
+    color: #057a55;
+}
+
+.avail-toggle.loan {
+    color: #6b7280;
+}
+
+.action-btns {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-edit,
+.btn-del {
+    color: #6b7280;
+    padding: 4px;
+}
+
+.btn-edit:hover {
+    color: #1a56db;
+}
+
+.btn-del:hover {
+    color: #dc2626;
+}
+
+/* ── Overlay Modal ── */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.book-popup {
+    background: white;
+    padding: 32px;
+    border-radius: var(--radius-md);
+    width: 440px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.book-popup h3 {
+    margin-bottom: 24px;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.book-popup label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.book-popup input {
+    margin-bottom: 16px;
+}
+
+.btn-save-book {
+    width: 100%;
+    background: #1a56db;
+    color: white;
+    padding: 10px;
+    font-weight: 600;
+    margin-top: 12px;
+}

@@ -1,0 +1,121 @@
+.profile-card {
+    max-width: 600px;
+    margin: 40px auto;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.profile-top {
+    padding: 48px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.profile-top h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.email {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.username {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.role-pill {
+    margin-top: 20px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #e5e7eb;
+    background: white;
+}
+
+/* ── Stats ── */
+.stats-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 32px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat span {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.stat label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* ── Permissions ── */
+.perms-section {
+    padding: 32px;
+}
+
+.perms-section h4 {
+    color: #6b7280;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-weight: 700;
+}
+
+.perms-section ul {
+    list-style: none;
+}
+
+.perms-section li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #374151;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 8px 0;
+}
+
+.check {
+    font-weight: 800;
+    color: #057a55;
+}

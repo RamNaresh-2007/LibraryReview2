@@ -1,0 +1,185 @@
+.loans-page,
+.members-page {
+    max-width: 1200px;
+}
+
+.loans-header,
+.members-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.loans-header h2,
+.members-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.btn-issue,
+.btn-add-member {
+    background: #1a56db;
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
+/* ── Status Pills ── */
+.status-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge.overdue {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-badge.returned {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+/* ── Members Grid ── */
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.member-card {
+    background: white;
+    padding: 24px;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius-md);
+}
+
+.mc-top {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.mc-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+}
+
+.mc-name {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.mc-email {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.mc-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #f3f4f6;
+    margin-top: 16px;
+}
+
+.mc-info label {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.mc-info span {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #111827;
+}
+
+.mc-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.btn-status {
+    flex: 1;
+    padding: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid #e5e7eb;
+    background: white;
+}
+
+.btn-status:hover {
+    background: #f9fafb;
+}
+
+/* ── Loans Table ── */
+.loans-table-wrap {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.loans-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.loans-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f9fafb;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.loans-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.9rem;
+}
+
+.l-member strong,
+.l-book strong {
+    color: #111827;
+}
+
+.l-member span,
+.l-book span {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+/* ── Popups ── */
+.issue-popup,
+.member-popup {
+    background: white;
+    padding: 32px;
+    border-radius: var(--radius-md);
+    width: 400px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
