@@ -3,7 +3,7 @@ import './BookManager.css';
 import ProgressBar from './ProgressBar';
 import { apiGet, apiPost, apiPut, apiPatch, apiDelete } from '../lib';
 
-const EMPTY_BOOK = { id: '', title: '', author: '', isbn: '', category: '', available: true };
+const EMPTY_BOOK = { id: '', title: '', author: '', isbn: '', categoryName: '', available: true };
 
 const BookManager = ({ role }) => {
     const [books, setBooks] = useState([]);
@@ -14,6 +14,8 @@ const BookManager = ({ role }) => {
     const [search, setSearch] = useState('');
     const [filterCat, setFilterCat] = useState('All');
     const [apiError, setApiError] = useState('');
+    const [showBorrowPopup, setShowBorrowPopup] = useState(false);
+    const [borrowData, setBorrowData] = useState({ book: null, dueDate: '' });
     const ftitled = useRef();
 
     const canManage = role === 'admin' || role === 'librarian';
@@ -22,7 +24,7 @@ const BookManager = ({ role }) => {
         setIsProgress(true);
         try {
             const d = await apiGet('/api/books');
-            setBooks(d || []);
+            setBooks(Array.isArray(d) ? d : []);
         } catch (err) {
             setApiError('Load failure');
         } finally {
@@ -33,13 +35,14 @@ const BookManager = ({ role }) => {
     useEffect(() => { fetchBooks(); }, []);
 
     // ── derived (optimized with useMemo) ──────────────────────────
-    const categories = React.useMemo(() => ['All', ...new Set(books.map(b => b.category).filter(Boolean))], [books]);
+    const categories = React.useMemo(() => ['All', ...new Set(books.map(b => typeof b.category === 'object' ? b.category?.name : (b.category || b.categoryName)).filter(Boolean))], [books]);
 
     const filtered = React.useMemo(() => {
         return books.filter(b => {
             const matchSearch = (b.title || '').toLowerCase().includes(search.toLowerCase()) ||
                 (b.author || '').toLowerCase().includes(search.toLowerCase());
-            const matchCat = filterCat === 'All' || b.category === filterCat;
+            const bCat = typeof b.category === 'object' ? b.category?.name : (b.category || b.categoryName);
+            const matchCat = filterCat === 'All' || bCat === filterCat;
             return matchSearch && matchCat;
         });
     }, [books, search, filterCat]);
@@ -54,7 +57,7 @@ const BookManager = ({ role }) => {
         if (!bookData.title) errors.title = true;
         if (!bookData.author) errors.author = true;
         if (!bookData.isbn) errors.isbn = true;
-        if (!bookData.category) errors.category = true;
+        if (!bookData.categoryName) errors.categoryName = true;
         setErrorData(errors);
         return Object.keys(errors).length > 0;
     };
@@ -70,7 +73,11 @@ const BookManager = ({ role }) => {
         const path = isEdit ? `/api/books/${bookData.id}` : `/api/books`;
 
         try {
-            const saved = isEdit ? await apiPut(path, bookData) : await apiPost(path, bookData);
+            // Clean up payload so backend doesn't crash on string category
+            const payload = { ...bookData };
+            delete payload.category;
+
+            const saved = isEdit ? await apiPut(path, payload) : await apiPost(path, payload);
             setBooks(prev => isEdit
                 ? prev.map(b => b.id === saved.id ? saved : b)
                 : [...prev, saved]
@@ -110,6 +117,41 @@ const BookManager = ({ role }) => {
             setBooks(originalBooks);
             setApiError('Toggle failed. Please try again.');
         }
+    };
+
+    const confirmBorrow = async () => {
+        if (!borrowData.dueDate) {
+            setApiError('Please select a return date');
+            return;
+        }
+        setIsProgress(true);
+        setApiError('');
+        const payload = {
+            memberName: localStorage.getItem('fullname') || localStorage.getItem('username') || 'Student',
+            memberRole: localStorage.getItem('role') || 'student',
+            bookTitle: borrowData.book.title,
+            isbn: borrowData.book.isbn || '—',
+            dueDate: borrowData.dueDate,
+        };
+
+        try {
+            await apiPost('/api/saga/issue-book', payload);
+            // After successful borrow, mark book as not available locally
+            setBooks(prev => prev.map(b => b.id === borrowData.book.id ? { ...b, available: false } : b));
+            setShowBorrowPopup(false);
+            setBorrowData({ book: null, dueDate: '' });
+            alert("Book borrowed successfully!");
+        } catch (err) {
+            setApiError(err.message || 'Failed to borrow book');
+        } finally {
+            setIsProgress(false);
+        }
+    };
+
+    const handleBorrowClick = (book) => {
+        setBorrowData({ book, dueDate: '' });
+        setShowBorrowPopup(true);
+        setApiError('');
     };
 
     const editBook = (book) => { setBookData(book); setErrorData({}); setShowPopup(true); setTimeout(() => ftitled.current?.focus(), 0); };
@@ -172,17 +214,24 @@ const BookManager = ({ role }) => {
                                         <span className='b-author'>{book.author}</span>
                                     </div>
                                 </td>
-                                <td><span className='cat-badge'>{book.category}</span></td>
+                                <td><span className='cat-badge'>{typeof book.category === 'object' ? book.category?.name : (book.category || book.categoryName)}</span></td>
                                 <td className='isbn-cell'>{book.isbn}</td>
                                 <td>
-                                    <button
-                                        disabled={!canManage}
-                                        className={`avail-toggle ${book.available ? 'avail' : 'loan'}`}
-                                        onClick={() => toggleAvail(book.id)}
-                                        title={canManage ? "Click to toggle availability" : "Viewing current status"}
-                                    >
-                                        {book.available ? '✓ Available' : '⊗ On Loan'}
-                                    </button>
+                                    {canManage ? (
+                                        <button
+                                            className={`avail-toggle ${book.available ? 'avail' : 'loan'}`}
+                                            onClick={() => toggleAvail(book.id)}
+                                            title="Click to toggle availability"
+                                        >
+                                            {book.available ? '✓ Available' : '⊗ On Loan'}
+                                        </button>
+                                    ) : (
+                                        book.available ? (
+                                            <button className='btn-borrow' onClick={() => handleBorrowClick(book)}>Borrow Book</button>
+                                        ) : (
+                                            <span className='status-unavailable'>Unavailable</span>
+                                        )
+                                    )}
                                 </td>
                                 {canManage && (
                                     <td>
@@ -213,7 +262,7 @@ const BookManager = ({ role }) => {
                         <div className='popup-row'>
                             <div>
                                 <label>Category *</label>
-                                <input className={errorData.category ? 'error' : ''} name='category' placeholder='e.g. CS, Math' value={bookData.category} onChange={handleInput} />
+                                <input className={errorData.categoryName ? 'error' : ''} name='categoryName' placeholder='e.g. CS, Math' value={bookData.categoryName || ''} onChange={handleInput} />
                             </div>
                             <div>
                                 <label>ISBN *</label>
@@ -228,6 +277,28 @@ const BookManager = ({ role }) => {
 
                         <button className='btn-save-book' onClick={saveBook} disabled={isProgress}>
                             {isProgress ? 'Saving…' : bookData.id ? 'Save Changes' : 'Add Book'}
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {showBorrowPopup && borrowData.book && (
+                <div className='overlay'>
+                    <div className='book-popup'>
+                        <span className='close-x' onClick={() => setShowBorrowPopup(false)}>&times;</span>
+                        <h3>📅 Borrow Book</h3>
+                        <p style={{marginBottom: '15px'}}>You are borrowing: <strong>{borrowData.book.title}</strong></p>
+
+                        <label>Return Date *</label>
+                        <input 
+                            type='date' 
+                            min={new Date().toISOString().split('T')[0]} 
+                            value={borrowData.dueDate} 
+                            onChange={e => setBorrowData(prev => ({ ...prev, dueDate: e.target.value }))} 
+                        />
+
+                        <button className='btn-save-book' onClick={confirmBorrow} disabled={isProgress} style={{marginTop: '20px'}}>
+                            {isProgress ? 'Processing…' : 'Confirm Borrow'}
                         </button>
                     </div>
                 </div>

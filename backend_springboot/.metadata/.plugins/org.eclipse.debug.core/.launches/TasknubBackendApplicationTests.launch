@@ -2,11 +2,12 @@
 <launchConfiguration type="org.eclipse.jdt.junit.launchconfig">
     <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/Tasknub_backend/src/test/java/klu/Taskhub_backend/TasknubBackendApplicationTests.java"/>
+        <listEntry value="/Taskhub_backend/src/test/java/klu/Taskhub_backend/TasknubBackendApplicationTests.java"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="1"/>
     </listAttribute>
+    <mapAttribute key="org.eclipse.debug.core.environmentVariables"/>
     <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
     <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
@@ -16,7 +17,7 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="klu.Taskhub_backend.TasknubBackendApplicationTests"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Tasknub_backend"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Taskhub_backend"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea&#10;"/>
 </launchConfiguration>

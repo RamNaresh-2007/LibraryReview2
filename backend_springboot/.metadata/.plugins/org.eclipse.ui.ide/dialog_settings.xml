@@ -31,6 +31,9 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\heman\OneDrive\Documents\Digital_Library_Management\springtools"/>
+			<item value="C:\Users\heman\OneDrive\Documents\lab exam\pagination-app\resources"/>
+			<item value="C:\Users\heman\OneDrive\Documents\lab exam\pagination-app"/>
 			<item value="c:\Users\heman\OneDrive\Documents\Digital_Library_Management\backend_springboot"/>
 			<item value="C:\Users\heman\OneDrive\Documents\Digital_Library_Management"/>
 			<item value="C:\Users\heman\OneDrive\Documents\dbded\Backend_project"/>

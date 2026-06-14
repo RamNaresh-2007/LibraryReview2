@@ -1,21 +1,20 @@
 .profile-card {
     max-width: 600px;
     margin: 40px auto;
-    background: white;
-    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border: 1px solid var(--border-gray);
     border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .profile-top {
-    padding: 48px 32px;
+    padding: 40px 32px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--border-gray);
 }
 
 .avatar {
@@ -26,48 +25,50 @@
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    font-weight: 700;
+    font-weight: 600;
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    background: var(--primary-blue);
 }
 
 .profile-top h2 {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
     margin-bottom: 4px;
+    margin-top: 0;
+    color: var(--text-dark);
 }
 
 .email {
-    color: #6b7280;
+    color: var(--text-muted);
     font-size: 0.95rem;
 }
 
 .username {
-    color: #9ca3af;
+    color: var(--text-muted);
     font-size: 0.85rem;
     margin-top: 4px;
 }
 
 .role-pill {
-    margin-top: 20px;
+    margin-top: 16px;
     padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    border: 1px solid #e5e7eb;
-    background: white;
+    border: 1px solid var(--border-gray);
+    background: #ffffff;
+    color: var(--text-main);
 }
 
 /* ── Stats ── */
 .stats-row {
     display: flex;
     justify-content: space-around;
-    padding: 32px;
-    border-bottom: 1px solid #f3f4f6;
+    padding: 24px;
+    border-bottom: 1px solid var(--border-gray);
 }
 
 .stat {
@@ -77,45 +78,102 @@
 .stat span {
     display: block;
     font-size: 1.5rem;
-    font-weight: 700;
-    color: #111827;
+    font-weight: 600;
+    color: var(--text-dark);
 }
 
 .stat label {
-    font-size: 0.75rem;
-    color: #6b7280;
-    text-transform: uppercase;
-    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--text-muted);
 }
 
 /* ── Permissions ── */
 .perms-section {
-    padding: 32px;
+    padding: 24px;
 }
 
 .perms-section h4 {
-    color: #6b7280;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    margin-bottom: 24px;
-    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    margin-top: 0;
+    font-weight: 600;
 }
 
 .perms-section ul {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .perms-section li {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #374151;
-    font-weight: 500;
-    font-size: 0.9rem;
+    color: var(--text-main);
+    font-size: 0.95rem;
     padding: 8px 0;
+    border-bottom: 1px solid var(--border-gray);
+}
+.perms-section li:last-child {
+    border-bottom: none;
 }
 
 .check {
-    font-weight: 800;
-    color: #057a55;
+    color: var(--success);
+    background: var(--success-bg);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.75rem;
+}
+
+/* ── Edit Profile ── */
+.btn-edit-profile {
+    margin-top: 16px;
+    background: #ffffff;
+    color: var(--text-main);
+    border: 1px solid var(--border-gray);
+    padding: 6px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.btn-edit-profile:hover {
+    background: var(--background-secondary);
+}
+
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 16px;
+}
+
+.profile-input {
+    margin-bottom: 12px;
+}
+
+.btn-save-profile {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.btn-cancel-profile {
+    background: transparent;
+    color: var(--text-dark);
+    border: 1px solid var(--border-gray);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
 }

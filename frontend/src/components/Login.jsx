@@ -15,6 +15,7 @@ const Login = ({ onLoginSuccess }) => {
     const [isProgress, setIsProgress] = useState(false);
     const [errorData, setErrorData] = useState({});
     const [apiError, setApiError] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
     const finput = useRef();
 
     const [signupData, setSignupData] = useState({ fullname: "", email: "", username: "", password: "", role: "student" });
@@ -28,6 +29,7 @@ const Login = ({ onLoginSuccess }) => {
         setIsSignIn(p => !p);
         setErrorData({});
         setApiError("");
+        setSuccessMsg("");
     };
 
     const handle = (setter, state) => (e) => setter({ ...state, [e.target.name]: e.target.value });
@@ -43,6 +45,7 @@ const Login = ({ onLoginSuccess }) => {
         setIsProgress(false);
         if (data.token) {
             localStorage.setItem("token", data.token);
+            if (data.id) localStorage.setItem("id", data.id);
             localStorage.setItem("fullname", data.fullname || data.username);
             localStorage.setItem("role", data.role);
             localStorage.setItem("username", data.username);
@@ -85,8 +88,11 @@ const Login = ({ onLoginSuccess }) => {
         setApiError("");
 
         try {
-            const data = await apiPost('/api/auth/register', signupData);
-            handleAuthResponse(data);
+            await apiPost('/api/auth/register', signupData);
+            setIsProgress(false);
+            setSuccessMsg("Account created successfully! Please sign in.");
+            setIsSignIn(true);
+            setSigninData(prev => ({ ...prev, username: signupData.username }));
         } catch (err) {
             handleAuthError(err);
         }
@@ -97,7 +103,8 @@ const Login = ({ onLoginSuccess }) => {
     };
 
     return (
-        <div className='app animate-in'>
+        <div className='app-viewport animate-in'>
+            <div className='auth-bg'></div>
             <div className='login-container'>
                 <div className='login-header'>
                     <span className="logo-circ">📚</span>
@@ -107,6 +114,7 @@ const Login = ({ onLoginSuccess }) => {
 
                 <div className='login-content'>
                     {apiError && <div className='api-error'>{apiError}</div>}
+                    {successMsg && <div className='success-msg'>{successMsg}</div>}
 
                     {isSignin ? (
                         <>
@@ -120,7 +128,6 @@ const Login = ({ onLoginSuccess }) => {
                                 {isProgress ? "Validating…" : "Sign In"}
                             </button>
                             <p className="toggle-auth">New here? <span onClick={switchWindow}>Create account</span></p>
-                            <div className="demo-hint" style={{ marginTop: 20, textAlign: 'center', fontSize: '0.8rem', color: '#999' }}>Demo: <b>admin</b> / <b>admin123</b></div>
                         </>
                     ) : (
                         <>
@@ -149,7 +156,7 @@ const Login = ({ onLoginSuccess }) => {
                     )}
                 </div>
 
-                <div className='login-footer' style={{ marginTop: 24, fontSize: '0.75rem', color: '#999', textAlign: 'center' }}>&copy; 2026 Library Management System</div>
+                <div className='login-footer' style={{ marginTop: 32, fontSize: '0.8rem', color: '#64748b', textAlign: 'center', opacity: 0.6 }}>&copy; 2026 Library Management System</div>
             </div>
             <ProgressBar isProgress={isProgress} />
         </div>

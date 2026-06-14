@@ -3,7 +3,7 @@ import json
 import urllib.error
 
 data = json.dumps({'username':'testuser_new3','password':'password'}).encode()
-req = urllib.request.Request('http://localhost:8080/api/auth/login', data=data, headers={'Content-Type': 'application/json'})
+req = urllib.request.Request('http://localhost:8000/api/auth/login', data=data, headers={'Content-Type': 'application/json'})
 
 try:
     response = urllib.request.urlopen(req)

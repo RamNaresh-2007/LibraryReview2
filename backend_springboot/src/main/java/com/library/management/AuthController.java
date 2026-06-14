@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -15,6 +18,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Endpoints for user login and registration")
 public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -27,14 +31,23 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        logger.info("Registration request for username: {}, password present: {}", user.getUsername(),
-                user.getPassword() != null);
-        if (userRepository.existsByUsername(user.getUsername())) {
+    @Operation(summary = "Register a new user", description = "Creates a new library member account")
+    public ResponseEntity<?> register(@RequestBody AuthDTOs.RegisterRequest req) {
+        logger.info("Registration request: username={}, email={}, role={}", req.getUsername(), req.getEmail(),
+                req.getRole());
+        if (req.getUsername() == null || req.getUsername().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Username is required"));
+        }
+        if (userRepository.existsByUsername(req.getUsername())) {
             return ResponseEntity.badRequest().body(Map.of("message", "Username taken"));
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
+        user.setUsername(req.getUsername());
+        user.setFullname(req.getFullname());
+        user.setEmail(req.getEmail());
+        user.setRole(req.getRole());
+        user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setStatus("active");
         user.setJoinedDate(LocalDate.now().toString());
         user.setLoans(0);
@@ -45,6 +58,7 @@ public class AuthController {
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
         return ResponseEntity.ok(Map.of(
                 "token", token,
+                "id", user.getId(),
                 "username", user.getUsername(),
                 "fullname", user.getFullname(),
                 "email", user.getEmail(),
@@ -52,9 +66,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> req) {
-        String username = req.get("username");
-        String password = req.get("password");
+    @Operation(summary = "User Login", description = "Authenticates user and returns JWT token")
+    public ResponseEntity<?> login(@RequestBody AuthDTOs.LoginRequest req) {
+        String username = req.getUsername();
+        String password = req.getPassword();
 
         return userRepository.findByUsername(username)
                 .filter(user -> passwordEncoder.matches(password, user.getPassword()))
@@ -63,6 +78,7 @@ public class AuthController {
                     logger.info("User logged in: {}", username);
                     return ResponseEntity.ok(Map.of(
                             "token", token,
+                            "id", user.getId(),
                             "username", user.getUsername(),
                             "fullname", user.getFullname(),
                             "email", user.getEmail(),

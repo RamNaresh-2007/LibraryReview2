@@ -1,0 +1,17 @@
+{
+  "name": "digital-library-orchestrator",
+  "version": "1.0.0",
+  "description": "Root Orchestrator for Digital Library Ecosystem",
+  "scripts": {
+    "install:all": "npm install && cd node_service && npm install && cd ../library_service && npm install && cd ../frontend && npm install",
+    "start": "concurrently -n \"GATEWAY,SPRING,NODE,LIB,FRONTEND\" -c \"blue,green,yellow,magenta,cyan\" \"npm run start:gateway\" \"npm run start:springboot\" \"npm run start:node\" \"npm run start:library\" \"npm run start:frontend\"",
+    "start:gateway": "cd backend_gateway && uvicorn main:app --port 8000 --reload",
+    "start:springboot": "cd backend_springboot && mvnw spring-boot:run",
+    "start:node": "cd node_service && npm start",
+    "start:library": "cd library_service && npm run dev",
+    "start:frontend": "cd frontend && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

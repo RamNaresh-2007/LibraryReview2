@@ -85,7 +85,8 @@ const Loans = ({ role }) => {
         };
 
         try {
-            const saved = await apiPost('/api/loans', payload);
+            // CO5: Call the Saga Orchestrator instead of direct Spring Boot endpoint
+            const saved = await apiPost('/api/saga/issue-book', payload);
             setLoans(prev => [...prev, saved]);
             setNewLoan({ memberName: '', memberRole: 'student', bookTitle: '', isbn: '', dueDate: '' });
             setShowIssue(false);

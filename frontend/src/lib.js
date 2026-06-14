@@ -1,4 +1,4 @@
-export const apibaseurl = "http://localhost:8000";
+export const apibaseurl = "http://127.0.0.1:8000";
 
 // ── JWT helpers ────────────────────────────────────────────────────
 export const getToken = () => localStorage.getItem("token") || "";
@@ -29,9 +29,13 @@ export async function callApi(method, path, body = null) {
 
         // Handle 401 Unauthorized globally
         if (res.status === 401) {
-            console.warn("Unauthorized! Clearing session...");
-            logout();
-            throw new Error("Your session has expired. Please log in again.");
+            const isLoginPage = window.location.pathname.includes('/login') || !isLoggedIn();
+            if (!isLoginPage) {
+                console.warn("Unauthorized! Clearing session...");
+                logout();
+                throw new Error("Your session has expired. Please log in again.");
+            }
+            // For login page, let the component handle the error
         }
 
         if (res.status === 204) return {};

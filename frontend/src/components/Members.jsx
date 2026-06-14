@@ -17,6 +17,11 @@ const Members = () => {
     const [memberData, setMemberData] = useState(EMPTY_MEMBER);
     const [isEditing, setIsEditing] = useState(false);
 
+    const [showHistoryPopup, setShowHistoryPopup] = useState(false);
+    const [historyMember, setHistoryMember] = useState(null);
+    const [historyLoans, setHistoryLoans] = useState([]);
+    const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+
     const fetchMembers = async () => {
         setIsLoading(true);
         try {
@@ -77,6 +82,21 @@ const Members = () => {
         setMemberData({ ...m, password: '' });
         setIsEditing(true);
         setShowPopup(true);
+    };
+
+    const openHistory = async (m) => {
+        setHistoryMember(m);
+        setShowHistoryPopup(true);
+        setIsLoadingHistory(true);
+        try {
+            const allLoans = await apiGet('/api/loans');
+            const memberLoans = allLoans.filter(l => l.memberName === m.username);
+            setHistoryLoans(memberLoans);
+        } catch (err) {
+            console.error("Failed to load history", err);
+        } finally {
+            setIsLoadingHistory(false);
+        }
     };
 
     const saveMember = async () => {
@@ -157,8 +177,9 @@ const Members = () => {
                             <button className={`btn-status ${m.status}`} onClick={() => toggleStatus(m.id)}>
                                 {m.status === 'active' ? 'Suspend' : 'Activate'}
                             </button>
-                            <button className='btn-edit-mem' onClick={() => openEdit(m)}>✏️</button>
-                            <button className='btn-del-mem' onClick={() => deleteMember(m.id)}>🗑</button>
+                            <button className='btn-edit-mem' onClick={() => openEdit(m)} title='Edit'>✏️</button>
+                            <button className='btn-edit-mem' onClick={() => openHistory(m)} title='View History'>📜</button>
+                            <button className='btn-del-mem' onClick={() => deleteMember(m.id)} title='Delete'>🗑</button>
                         </div>
                     </div>
                 ))}
@@ -195,6 +216,57 @@ const Members = () => {
                         <button className='btn-save' onClick={saveMember} disabled={isLoading}>
                             {isLoading ? 'Saving…' : isEditing ? 'Save Changes' : 'Add Member'}
                         </button>
+                        <button className='btn-cancel' onClick={() => setShowPopup(false)} disabled={isLoading}>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {showHistoryPopup && historyMember && (
+                <div className='overlay'>
+                    <div className='history-popup member-popup' style={{maxWidth: '600px'}}>
+                        <span className='close-x' onClick={() => setShowHistoryPopup(false)}>&times;</span>
+                        <h3>📜 {historyMember.fullname}'s Loan History</h3>
+                        <p style={{marginBottom: 16, fontSize: '0.85rem', color: '#6b7280'}}>Username: @{historyMember.username}</p>
+                        
+                        {isLoadingHistory ? (
+                            <div style={{padding: '20px', textAlign: 'center'}}>Loading history...</div>
+                        ) : historyLoans.length === 0 ? (
+                            <div style={{padding: '20px', textAlign: 'center', color: '#6b7280'}}>No loan history found for this member.</div>
+                        ) : (
+                            <div style={{maxHeight: '400px', overflowY: 'auto'}}>
+                                <table style={{width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left'}}>
+                                    <thead>
+                                        <tr style={{borderBottom: '1px solid #e5e7eb'}}>
+                                            <th style={{padding: '8px', color: '#6b7280'}}>Book Title</th>
+                                            <th style={{padding: '8px', color: '#6b7280'}}>Issued</th>
+                                            <th style={{padding: '8px', color: '#6b7280'}}>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {historyLoans.map((l, i) => {
+                                            const isOverdue = l.dueDate < new Date().toISOString().split('T')[0] && l.status === 'active';
+                                            return (
+                                                <tr key={i} style={{borderBottom: '1px solid #f3f4f6'}}>
+                                                    <td style={{padding: '8px', fontWeight: 600}}>{l.bookTitle}</td>
+                                                    <td style={{padding: '8px'}}>{l.issuedDate}</td>
+                                                    <td style={{padding: '8px'}}>
+                                                        <span style={{
+                                                            background: l.status === 'returned' ? '#def7ec' : (isOverdue ? '#fee2e2' : '#ebf5ff'),
+                                                            color: l.status === 'returned' ? '#057a55' : (isOverdue ? '#dc2626' : '#1a56db'),
+                                                            padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600
+                                                        }}>
+                                                            {l.status === 'returned' ? 'RETURNED' : (isOverdue ? 'OVERDUE' : 'ACTIVE')}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
