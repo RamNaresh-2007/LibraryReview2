@@ -105,6 +105,12 @@ const Login = ({ onLoginSuccess }) => {
     return (
         <div className='app-viewport animate-in'>
             <div className='auth-bg'></div>
+            <div style={{ position: 'absolute', top: '20px', right: '20px', backgroundColor: 'rgba(255,255,255,0.9)', padding: '15px', borderRadius: '8px', zIndex: 10, boxShadow: '0 4px 6px rgba(0,0,0,0.1)', fontFamily: 'system-ui, sans-serif', fontSize: '0.9rem', color: '#333' }}>
+                <div style={{ margin: '0 0 5px 0', fontWeight: 'bold' }}>Team Members:</div>
+                <div style={{ margin: '2px 0' }}>2500031779 : Swarna Jaswanth</div>
+                <div style={{ margin: '2px 0' }}>2500030702 : G Hemanth Reddy</div>
+                <div style={{ margin: '2px 0' }}>2500032071 : R Ram Naresh</div>
+            </div>
             <div className='login-container'>
                 <div className='login-header'>
                     <span className="logo-circ">📚</span>
