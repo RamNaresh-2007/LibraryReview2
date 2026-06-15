@@ -3,11 +3,13 @@ import logging
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse
 
+import os
+
 logger = logging.getLogger("gateway.utils")
 
-SPRING_BOOT_URL = "http://localhost:8085"
-NODE_SERVICE_URL = "http://localhost:8081"
-LIBRARY_SERVICE_URL = "http://localhost:8080"
+SPRING_BOOT_URL = os.environ.get("SPRING_BOOT_URL", "http://localhost:8085")
+NODE_SERVICE_URL = os.environ.get("NODE_SERVICE_URL", "http://localhost:8081")
+LIBRARY_SERVICE_URL = os.environ.get("LIBRARY_SERVICE_URL", "http://localhost:8080")
 client = httpx.AsyncClient(timeout=30)
 
 async def forward_request(request: Request, path: str, target_root: str = SPRING_BOOT_URL):

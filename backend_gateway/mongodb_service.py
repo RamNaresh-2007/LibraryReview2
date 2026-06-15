@@ -3,8 +3,9 @@ import datetime
 import logging
 
 # ── CO2: MongoDB Document Engineering (BSON/CRUD/Aggregation) ──────
+import os
 
-MONGO_URI = "mongodb://admin:admin@ac-8ah9cqr-shard-00-00.7jmuxfw.mongodb.net:27017,ac-8ah9cqr-shard-00-01.7jmuxfw.mongodb.net:27017,ac-8ah9cqr-shard-00-02.7jmuxfw.mongodb.net:27017/digital_library?ssl=true&replicaSet=atlas-c0qz00-shard-0&authSource=admin&appName=Cluster0"
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb://admin:admin@ac-8ah9cqr-shard-00-00.7jmuxfw.mongodb.net:27017,ac-8ah9cqr-shard-00-01.7jmuxfw.mongodb.net:27017,ac-8ah9cqr-shard-00-02.7jmuxfw.mongodb.net:27017/digital_library?ssl=true&replicaSet=atlas-c0qz00-shard-0&authSource=admin&appName=Cluster0")
 DB_NAME = "digital_library"
 
 class MongoDBService:

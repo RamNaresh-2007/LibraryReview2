@@ -1,4 +1,4 @@
-export const apibaseurl = "http://127.0.0.1:8000";
+export const apibaseurl = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 // ── JWT helpers ────────────────────────────────────────────────────
 export const getToken = () => localStorage.getItem("token") || "";

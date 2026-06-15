@@ -1,0 +1,98 @@
+databases:
+  - name: library-db
+    databaseName: library_db
+    user: postgres
+    plan: free
+
+services:
+  # 1. Spring Boot Core Service
+  - type: web
+    name: backend-springboot
+    env: docker
+    rootDir: backend_springboot
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: library-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: library-db
+          property: password
+      - key: PGHOST
+        fromDatabase:
+          name: library-db
+          property: host
+      - key: PGPORT
+        fromDatabase:
+          name: library-db
+          property: port
+      - key: PGDATABASE
+        fromDatabase:
+          name: library-db
+          property: database
+
+  # 2. Node.js Notification Service
+  - type: web
+    name: node-notification-service
+    env: node
+    rootDir: node_service
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URI
+        value: mongodb://admin:admin@ac-8ah9cqr-shard-00-00.7jmuxfw.mongodb.net:27017,ac-8ah9cqr-shard-00-01.7jmuxfw.mongodb.net:27017,ac-8ah9cqr-shard-00-02.7jmuxfw.mongodb.net:27017/digital_library?ssl=true&replicaSet=atlas-c0qz00-shard-0&authSource=admin&appName=Cluster0
+
+  # 3. Node.js Library Service
+  - type: web
+    name: library-service-node
+    env: node
+    rootDir: library_service
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+
+  # 4. FastAPI Gateway
+  - type: web
+    name: backend-gateway-fastapi
+    env: python
+    rootDir: backend_gateway
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SPRING_BOOT_URL
+        fromService:
+          type: web
+          name: backend-springboot
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: NODE_SERVICE_URL
+        fromService:
+          type: web
+          name: node-notification-service
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: LIBRARY_SERVICE_URL
+        fromService:
+          type: web
+          name: library-service-node
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: MONGO_URI
+        value: mongodb://admin:admin@ac-8ah9cqr-shard-00-00.7jmuxfw.mongodb.net:27017,ac-8ah9cqr-shard-00-01.7jmuxfw.mongodb.net:27017,ac-8ah9cqr-shard-00-02.7jmuxfw.mongodb.net:27017/digital_library?ssl=true&replicaSet=atlas-c0qz00-shard-0&authSource=admin&appName=Cluster0
+
+  # 5. React Frontend
+  - type: web
+    name: frontend-react
+    env: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: backend-gateway-fastapi
+          envVarKey: RENDER_EXTERNAL_URL
