@@ -17,7 +17,7 @@ async def forward_request(request: Request, path: str, target_root: str = SPRING
     params = dict(request.query_params)
     headers = {
         k: v for k, v in request.headers.items()
-        if k.lower() not in ("host", "content-length", "origin")
+        if k.lower() not in ("host", "content-length", "origin", "accept-encoding")
     }
     
     try:
