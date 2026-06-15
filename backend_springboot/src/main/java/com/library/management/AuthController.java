@@ -74,6 +74,10 @@ public class AuthController {
         return userRepository.findByUsername(username)
                 .filter(user -> passwordEncoder.matches(password, user.getPassword()))
                 .map(user -> {
+                    if ("suspended".equalsIgnoreCase(user.getStatus())) {
+                        logger.warn("Failed login attempt - user suspended: {}", username);
+                        return ResponseEntity.status(403).body(Map.of("message", "Your account is suspended. Please contact the administrator."));
+                    }
                     String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
                     logger.info("User logged in: {}", username);
                     return ResponseEntity.ok(Map.of(
