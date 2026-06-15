@@ -1,7 +1,6 @@
 databases:
   - name: library-db
     databaseName: library_db
-    user: postgres
     plan: free
 
 services:
