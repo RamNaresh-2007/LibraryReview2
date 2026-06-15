@@ -1,10 +1,9 @@
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
 WORKDIR /app
-COPY pom.xml mvnw ./
-COPY .mvn .mvn
-RUN ./mvnw dependency:resolve
+COPY pom.xml ./
+RUN mvn dependency:resolve
 COPY src src
-RUN ./mvnw package -DskipTests
+RUN mvn package -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
